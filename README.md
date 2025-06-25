@@ -1,57 +1,70 @@
-### 1）环境
+### 1)环境创建
 
-#### ①mamba
+#### **①mamba** 
 
-```shell
-mamba create -n pycuda_tutorial python=3.8
-mamba activate pycuda_tutorial
+- **安装mamba** 
 
-mamba install conda-forge::ipython
-```
+	```shell
+	conda install conda-forge::mamba
+	```
 
-#### ②日志
+- **创建环境** 
 
-- 输出终端日志到log文件
+	```shell
+	mamba create -n pycuda_tutorial python=3.8
+	mamba activate pycuda_tutorial
+	```
+
+- **安装库** 
+
+	```shell
+	mamba install conda-forge::ipython
+	```
+
+#### **②日志** 
+
+- **输出终端输出到log文件，例如** 
 
 	```cmd
 	python 01.hello-world_gpu.py > 01.hello-world_gpu.log 2>&1
 	```
 
-### 2）性能分析
+### 2)性能分析
 
-#### ①Nsight Systems
+#### **①使用Nsight Systems** 
 
 ```cmd
 nsys profile --stats=true -o matrix_ker_report matrix_ker.exe
 ```
 
-- Nsight Compute有问题
+### 3)Scikit-CUDA(for Chapter07)
 
-### 3）Scikit-CUDA
+#### **①Scikit-CUDA** 
 
-#### ①Scikit-CUDA
+- **`pip install scikit-cuda` 下载的有问题，上传的为修改过后的** 
 
-- 本地编译安装（pip库的直接下载使用报错）
+- **解释、手动安装与修改如下** 
 
   ```shell
   git clone git@github.com:lebedov/scikit-cuda.git
   ```
 
-- 如果使用的cuda11.x，则需修改 **Chapter07\scikit-cuda\skcuda\cusolver.py** 的 **_win32_version_list** 列表（在 CUDA 11 中，实际的 `cusolver` DLL 文件名是 `cusolver64_11.dll`，并非 `cusolver64_110.dll` ）
+  - **如果使用的cuda11.x，则需修改 *scikit-cuda\skcuda\cusolver.py* 的 *_win32_version_list* 列表（在 CUDA 11 中，实际的 *cusolver* DLL 文件名是 *cusolver64_11.dll*，并非 *cusolver64_110.dll* ）** 
 
-	```shell
-	_win32_version_list = [11, 10, 10, 100, 92, 91, 90, 80, 75, 70]
-	```
-	
-	> 参考 https://github.com/lebedov/scikit-cuda/issues/321#issuecomment-992062496 
-	
-- 安装
+  	```python
+  	_win32_version_list = [11, 10, 10, 100, 92, 91, 90, 80, 75, 70]
+  	```
 
-    ```cmd
-    cd scikit-cuda
-    python setup.py install
+  	> **参考 https://github.com/lebedov/scikit-cuda/issues/321#issuecomment-992062496** 
 
-#### ②ipython命令行执行
+  - **安装** 
+
+  	```shell
+  	cd scikit-cuda
+  	python setup.py install
+  	```
+
+#### **②ipython命令行执行** 
 
 ```cmd
 In [4]: %run linalg.svd.pca.py

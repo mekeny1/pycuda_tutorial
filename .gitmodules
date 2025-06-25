@@ -1,0 +1,3 @@
+[submodule "Chapter07/scikit-cuda"]
+	path = Chapter07/scikit-cuda
+	url = git@github.com:lebedov/scikit-cuda.git
