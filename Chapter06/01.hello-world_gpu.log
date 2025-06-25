@@ -1,0 +1,13 @@
+Hello world from thread 0, in block 0!
+Hello world from thread 1, in block 0!
+Hello world from thread 2, in block 0!
+Hello world from thread 3, in block 0!
+Hello world from thread 4, in block 0!
+Hello world from thread 0, in block 1!
+Hello world from thread 1, in block 1!
+Hello world from thread 2, in block 1!
+Hello world from thread 3, in block 1!
+Hello world from thread 4, in block 1!
+-------------------------------------
+This kernel was launched over a grid consisting of 2 blocks,
+where each block has 5 threads.
