@@ -1,0 +1,3 @@
+Our Monte Carlo estimate of Pi is: 3.1415915
+NumPy's Pi constant is: 3.141592653589793
+Our estimate passes NumPy's 'allclose': True

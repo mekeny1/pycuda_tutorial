@@ -1,73 +1,75 @@
-### 1)环境创建
+### .1 mamba 
 
-#### **①mamba** 
+#### 1)使用mamba 
 
-- **安装mamba** 
+base环境下执行
 
-	```shell
-	conda install conda-forge::mamba
-	```
+```shell
+conda install conda-forge::mamba
+```
 
-- **创建环境** 
+使用mamba创建
 
-	```shell
-	mamba create -n pycuda_tutorial python=3.8
-	mamba activate pycuda_tutorial
-	```
+```shell
+mamba create -n pycuda_tutorial python=3.8
+mamba activate pycuda_tutorial
+```
 
-- **安装库** 
+ipython库安装
 
-	```shell
-	mamba install conda-forge::ipython
-	```
+```shell
+mamba install conda-forge::ipython
+```
 
-#### **②日志** 
+### .2 日志输出 
 
-- **输出终端输出到log文件，例如** 
+终端信息重定位到log文件，如 
 
-	```cmd
-	python 01.hello-world_gpu.py > 01.hello-world_gpu.log 2>&1
-	```
+```cmd
+python 01.hello-world_gpu.py > 01.hello-world_gpu.log 2>&1
+```
 
-### 2)性能分析
+### .3 调试与性能分析
 
-#### **①使用Nsight Systems** 
+#### 1)使用Nsight Systems 
 
 ```cmd
 nsys profile --stats=true -o matrix_ker_report matrix_ker.exe
 ```
 
-### 3)Scikit-CUDA(for Chapter07)
+### .4 Scikit-CUDA(Chapter07)
 
-#### **①Scikit-CUDA** 
+#### 1)Scikit-CUDA安装 
 
-- **`pip install scikit-cuda` 下载的有问题，上传的为修改过后的** 
+`pip install scikit-cuda` 下载的有问题，上传的为修改过后的 
 
-- **解释、手动安装与修改如下** 
+解释、手动安装与修改如下 
 
-  ```shell
-  git clone git@github.com:lebedov/scikit-cuda.git
-  ```
+```shell
+git clone git@github.com:lebedov/scikit-cuda.git
+```
 
-  - **如果使用的cuda11.x，则需修改 *scikit-cuda\skcuda\cusolver.py* 的 *_win32_version_list* 列表（在 CUDA 11 中，实际的 *cusolver* DLL 文件名是 *cusolver64_11.dll*，并非 *cusolver64_110.dll* ）** 
+如果使用的cuda11.x，则需修改源码 **scikit-cuda\skcuda\cusolver.py** 的 **_win32_version_list** 列表（在 CUDA 11 中，实际的 **cusolver** DLL 文件名是 **cusolver64_11.dll**，并非 **cusolver64_110.dll** ）
 
-  	```python
-  	_win32_version_list = [11, 10, 10, 100, 92, 91, 90, 80, 75, 70]
-  	```
+```python
+_win32_version_list = [11, 10, 10, 100, 92, 91, 90, 80, 75, 70]
+```
 
-  	> **参考 https://github.com/lebedov/scikit-cuda/issues/321#issuecomment-992062496** 
+参考
 
-  - **安装** 
+> ***https://github.com/lebedov/scikit-cuda/issues/321#issuecomment-992062496*** 
 
-  	```shell
-  	cd scikit-cuda
-  	python setup.py install
-  	```
+安装 
 
-#### **②ipython命令行执行** 
+```shell
+cd scikit-cuda
+python setup.py install
+```
+
+#### 2)ipython命令行执行 
 
 ```cmd
-In [4]: %run linalg.svd.pca.py
+In [4]: run linalg.svd.pca.py
 D:\ProgramData\miniconda3\envs\pycuda_tutorial\lib\site-packages\scikit_cuda-0.5.4-py3.8.egg\skcuda\cublas.py:284: UserWarning: creating CUBLAS context to get version number
   warnings.warn('creating CUBLAS context to get version number')
 

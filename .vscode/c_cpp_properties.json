@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "D:/ProgramData/v11.8/include",
+                "D:/ProgramFiles/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.29.30133/include"
+            ],
+            "defines": ["_DEBUG", "UNICODE", "_UNICODE", "__CUDACC__"],
+            "windowsSdkVersion": "10.0.22621.0",
+            "compilerPath": "cl.exe",
+            "intelliSenseMode": "windows-msvc-x64"
+        }
+    ],
+    "version": 4
+}
