@@ -1,6 +1,6 @@
-### .1 mamba 
+# pycuda_tutorial
 
-#### 1)使用mamba 
+## mamba 
 
 base环境下执行
 
@@ -21,7 +21,7 @@ ipython库安装
 mamba install conda-forge::ipython
 ```
 
-### .2 日志输出 
+## 日志输出 
 
 终端信息重定位到log文件，如 
 
@@ -29,17 +29,17 @@ mamba install conda-forge::ipython
 python 01.hello-world_gpu.py > 01.hello-world_gpu.log 2>&1
 ```
 
-### .3 调试与性能分析
+## 调试与性能分析
 
-#### 1)使用Nsight Systems 
+### 使用Nsight Systems 
 
 ```cmd
 nsys profile --stats=true -o matrix_ker_report matrix_ker.exe
 ```
 
-### .4 Scikit-CUDA(Chapter07)
+### Scikit-CUDA(Chapter07)
 
-#### 1)Scikit-CUDA安装 
+#### Scikit-CUDA安装 
 
 `pip install scikit-cuda` 下载的有问题，上传的为修改过后的 
 
@@ -57,7 +57,7 @@ _win32_version_list = [11, 10, 10, 100, 92, 91, 90, 80, 75, 70]
 
 参考
 
-> ***https://github.com/lebedov/scikit-cuda/issues/321#issuecomment-992062496*** 
+> *https://github.com/lebedov/scikit-cuda/issues/321#issuecomment-992062496* 
 
 安装 
 
@@ -66,7 +66,7 @@ cd scikit-cuda
 python setup.py install
 ```
 
-#### 2)ipython命令行执行 
+## ipython
 
 ```cmd
 In [4]: run linalg.svd.pca.py
@@ -87,4 +87,67 @@ In [7]: print(v[:,1])
 [ 0.01290779  0.0074502   0.01737309 ...  0.00029924 -0.01253529
   0.0125266 ]
 ```
+
+## Ctypes(chapter10)
+
+**绕过pycuda实现cuda内核函数的调用** 
+
+### test
+
+ipython
+
+```python
+import ctypes
+
+# linux
+# libc=ctypes.CDLL("libc.so.6")
+# windows
+libc=ctypes.CDLL("msvcrt.dll")
+```
+
+#### printf
+
+字符串输出，需显式转换为字节字符串，即在字符串前添加 b
+
+```python
+libc.printf(b"Ctypes test string out.\n")
+```
+
+双精度浮点数输出
+
+```python
+libc.printf(b"ctypes test double floats out: %f.\n",ctypes.c_double(3.14))
+```
+
+### cuda c
+
+
+
+.cu编译成dll
+
+```cmd
+nvcc -shared -o mandelbrot.dll mandelbrot.cu
+```
+
+
+
+### cuda driver api
+
+所有 c_char_p 相关参数都要传 bytes 类型（前面加 b），否则
+
+TypeError: bytes or integer address expected instead of str instance
+
+```python
+cuModuleLoad(byref(cuModule), c_char_p(b"./mandelbrot.ptx"))
+```
+
+
+
+
+
+
+
+
+
+
 
