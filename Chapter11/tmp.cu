@@ -1,19 +1,43 @@
-__global__ void vec_ker(int *ints, double *doubles)
+__device__ void __inline__ laneid(int *id)
 {
-    int4 f1, f2;
+    asm("mov.u32 %0,%%laneid;":"=r"(*id));
+}
 
-    f1 = *reinterpret_cast<int4 *>(ints);
-    f2 = *reinterpret_cast<int4 *>(&ints[4]);
+__device__ void __inline__ split64(double val,int *lo,int *hi)
+{
+    asm volatile("mov.b64 {%0 %1},%2;":"=r"(*lo),"=r"(*hi):"d"(*val));
+}
 
-    printf("First int4: %d, %d, %d, %d\\n", f1.x, f1.y, f1.z, f1.w);
-    printf("Second int4: %d, %d, %d, %d\\n", f2.x, f2.y, f2.z, f2.w);
+__device__ void __inline__ combine64(double *val,int lo,int hi)
+{
+    asm volatile("mov.b64 %0,{%1,%2};":"=d"(*val):"r"(lo),"r"(hi));
+}
 
-    double2 d1, d2;
+__global__ void sum_ker(double *input,double *out)
+{
+    int id;
+    laneid(id);
 
-    d1 = *reinterpret_cast<double2 *>(doubles);
+    double2 vals=*reinterpret_cast<double2*>(&input[(blockDim.x*blockIdx.x+threadIdx.x)*2]);
 
-    d2 = *reinterpret_cast<double2 *>(&doubles[2]);
+    double sum_val=vals.x+vals.y;
+    double temp;
 
-    printf("First double2: %f, %f\\n", d1.x, d1.y);
-    printf("Second double2: %f, %f\\n", d2.x, d2.y);
+    int s1,s2;
+
+    for (int i = 1; i < 32; i*2)
+    {
+        split64(sum_val,s1,s2);
+
+        s1=__shfl_down_sync(s1,i,32);
+        s2=__shfl_down_sync(s2,i,32);
+
+        combine64(temp,s1,s2);
+        sum_val+=temp;
+    }
+
+    if(id==0)
+    {
+        atomicAdd(out,sum_val);
+    }
 }
